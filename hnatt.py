@@ -34,15 +34,16 @@ class Attention(Layer):
 	def build(self, input_shape):
 		# Create a trainable weight variable for this layer.
 		self.context = self.add_weight(name='context', 
-													   shape=(input_shape[-1], 1),
-													   initializer=initializers.RandomNormal(
-															mean=0.0, stddev=0.05, seed=None),
-													   regularizer=self.regularizer,
-													   trainable=True)
+			shape=(input_shape[-1], 1),
+			initializer=initializers.RandomNormal(
+			mean=0.0, stddev=0.05, seed=None),
+			regularizer=self.regularizer,
+			trainable=True)
 		super(Attention, self).build(input_shape)
 
 	def compute_mask(self, input, input_mask=None):
   		return None
+	
 	def call(self, x, mask=None):
 		attention_in = K.exp(K.squeeze(K.dot(x, self.context), axis=-1))
 		attention = attention_in/K.expand_dims(K.sum(attention_in, axis=-1), -1)
